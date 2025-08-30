@@ -1,0 +1,56 @@
+name: Generate VCF Bot
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Full Name'
+        required: true
+        default: 'John Doe'
+      org:
+        description: 'Organization'
+        required: false
+        default: 'Noweapon Digitals Consult'
+      title:
+        description: 'Job Title'
+        required: false
+        default: 'Digital Consultant'
+      phone:
+        description: 'Phone Number'
+        required: true
+        default: '+233123456789'
+      email:
+        description: 'Email Address'
+        required: true
+        default: 'johndoe@example.com'
+      address:
+        description: 'Address'
+        required: false
+        default: 'Accra, Ghana'
+      website:
+        description: 'Website URL'
+        required: false
+        default: 'https://yourwebsite.com'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Generate VCF
+        run: |
+          python generate_vcf.py "${{ github.event.inputs.name }}" "${{ github.event.inputs.org }}" "${{ github.event.inputs.title }}" "${{ github.event.inputs.phone }}" "${{ github.event.inputs.email }}" "${{ github.event.inputs.address }}" "${{ github.event.inputs.website }}"
+
+      - name: Upload VCF as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: contact-vcf
+          path: contact_*.vcf

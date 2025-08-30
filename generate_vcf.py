@@ -1,27 +1,41 @@
-import sys
+import os
 
-# Take arguments from workflow input
-name = sys.argv[1]
-org = sys.argv[2]
-title = sys.argv[3]
-phone = sys.argv[4]
-email = sys.argv[5]
-address = sys.argv[6]
-website = sys.argv[7]
+# Example multiple contacts
+contacts = [
+    {
+        "FN": "John Doe",
+        "ORG": "Noweapon Digitals Consult",
+        "TITLE": "Digital Consultant",
+        "TEL": "+233123456789",
+        "EMAIL": "johndoe@example.com",
+        "ADR": "Accra;Greater Accra;;Ghana",
+        "URL": "https://noweapondigitals.com"
+    },
+    {
+        "FN": "Mary Smith",
+        "ORG": "Noweapon Digitals Consult",
+        "TITLE": "Project Manager",
+        "TEL": "+233987654321",
+        "EMAIL": "marysmith@example.com",
+        "ADR": "Kumasi;Ashanti;;Ghana",
+        "URL": "https://noweapondigitals.com/team"
+    }
+]
 
-vcf_content = f"""BEGIN:VCARD
-VERSION:3.0
-FN:{name}
-ORG:{org}
-TITLE:{title}
-TEL;TYPE=WORK,VOICE:{phone}
-EMAIL:{email}
-ADR;TYPE=WORK:;;{address}
-URL:{website}
-END:VCARD
-"""
+# Generate VCF file
+def create_vcf(contacts, filename="contacts.vcf"):
+    with open(filename, "w", encoding="utf-8") as f:
+        for contact in contacts:
+            f.write("BEGIN:VCARD\n")
+            f.write("VERSION:3.0\n")
+            f.write(f"FN:{contact['FN']}\n")
+            f.write(f"ORG:{contact['ORG']}\n")
+            f.write(f"TITLE:{contact['TITLE']}\n")
+            f.write(f"TEL;TYPE=WORK,VOICE:{contact['TEL']}\n")
+            f.write(f"EMAIL:{contact['EMAIL']}\n")
+            f.write(f"ADR;TYPE=WORK:;;{contact['ADR']}\n")
+            f.write(f"URL:{contact['URL']}\n")
+            f.write("END:VCARD\n")
 
-with open("contact.vcf", "w") as f:
-    f.write(vcf_content)
-
-print("✅ VCF file generated: contact.vcf")
+create_vcf(contacts)
+print("✅ contacts.vcf file generated successfully!")
